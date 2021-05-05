@@ -21,7 +21,7 @@ export class App extends React.Component {
     event.preventDefault();
     try{
 
-      const url=`https://us1.locationiq.com/v1/search.php?key=pk.8202a69aece41c46ea236eb49f1ed96b&q=${this.state.searchQuery}&format=json`;
+      const url=`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_MAP_KEY}&q=${this.state.searchQuery}&format=json`;
       const req=await axios.get(url);
       this.setState({
         data:req.data[0],
@@ -43,12 +43,12 @@ export class App extends React.Component {
 
   getWeather=async()=>{
 
-    const epressWeatherUrl=`http://localhost:3005/weather`;
+    const epressWeatherUrl=`http://localhost:3030/weather`;
     const reqExpress=await axios.get(epressWeatherUrl);
-    console.log(reqExpress);
+    console.log(reqExpress.data);
     this.setState({
       weatherData:reqExpress.data,
-      show:true,
+      // show:true,
     });
 
   }
@@ -71,7 +71,8 @@ export class App extends React.Component {
           />
           <Weather weatherInfo={this.state.weatherData}/>
 
-        </>}
+        </>
+        }
         {/* :''} */}
       </div>
     );
