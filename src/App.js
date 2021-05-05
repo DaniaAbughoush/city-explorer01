@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import Forms from './component/Form';
+import Map from './component/Map';
+import Weather from './component/Weather';
 
 export class App extends React.Component {
   constructor(props){
@@ -9,7 +10,8 @@ export class App extends React.Component {
     this.state={
       data:'',
       show:false,
-      searchQuery:''
+      searchQuery:'',
+      weatherData:'',
 
     };
   }
@@ -36,6 +38,19 @@ export class App extends React.Component {
     this.setState({
       searchQuery:event.target.value
     });
+    this.getWeather();
+  }
+
+  getWeather=async()=>{
+
+    const epressWeatherUrl=`http://localhost:3005/weather`;
+    const reqExpress=await axios.get(epressWeatherUrl);
+    console.log(reqExpress);
+    this.setState({
+      weatherData:reqExpress.data,
+      show:true,
+    });
+
   }
 
 
@@ -43,18 +58,21 @@ export class App extends React.Component {
   render(){
     return (
       <div>
-        <Form onSubmit={this.getcity}>
+        <Forms getcity={this.getcity} updateSearchQuery={this.updateSearchQuery}
+        />
 
-          <input type='text' onChange={this.updateSearchQuery}/>
-          <Button type='submit'>Explore!</Button>
-        </Form>
+
         {this.state.error?<h1>{this.state.error}</h1>:''}
-        {/* <img alt='nn' src={`https://maps.locationiq.com/v3/staticmap?key=pk.8202a69aece41c46ea236eb49f1ed96b&q&center=${this.state.data.lon},${this.state.data.lat}&zoom=7.5`}/> */}
-        {this.state.data.lat!== undefined ?
-          <>
-            <p>{this.state.data.display_name}</p>
-            <h5>{this.state.data.lon},{this.state.data.lat}</h5>
-            <img src={`https://maps.locationiq.com/v3/staticmap?key=pk.d36871f015649f915282f374cff76628&q&center=${this.state.data.lat},${this.state.data.lon}&zoom=10&size=500x500`} alt='' /></>:''}
+        {/* {this.state.data.lat!== undefined ? */}
+        {this.state.show &&
+        <>
+          <Map display_name={this.state.data.display_name}
+            lon={this.state.data.lon} lat={this.state.data.lat}
+          />
+          <Weather weatherInfo={this.state.weatherData}/>
+
+        </>}
+        {/* :''} */}
       </div>
     );
   }
