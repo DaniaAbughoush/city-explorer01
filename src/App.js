@@ -2,7 +2,10 @@ import React from 'react';
 import axios from 'axios';
 import Forms from './component/Form';
 import Map from './component/Map';
-import Weather from './component/Weather';
+import WeatherData from './component/Weather';
+import Movie from './component/Movie';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import CardColumns from 'react-bootstrap/CardColumns'
 
 export class App extends React.Component {
   constructor(props){
@@ -11,7 +14,8 @@ export class App extends React.Component {
       data:'',
       show:false,
       searchQuery:'',
-      weatherData:'',
+      weatherData:[],
+      movieObjext:[],
 
     };
   }
@@ -20,41 +24,55 @@ export class App extends React.Component {
   getcity=async(event)=>{
     event.preventDefault();
     try{
+    const url=`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_MAP_KEY}&q=${this.state.searchQuery}&format=json`;
+    const req=await axios.get(url);
+    // console.log(url);
+    this.setState({
+      data:req.data[0],
+      show:true
 
-      const url=`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_MAP_KEY}&q=${this.state.searchQuery}&format=json`;
-      const req=await axios.get(url);
-      this.setState({
-        data:req.data[0],
-        show:true
-
-      });
+    });
     }
     catch(err){
       this.setState({error: `${err.message}: ${err.response.data.error}`});
     }
+    this.getWeather();
+ 
   }
   updateSearchQuery=(event)=>{
     event.preventDefault();
     this.setState({
       searchQuery:event.target.value
     });
-    this.getWeather();
+    // this.getWeather();
+    this.getMovie()
   }
 
   getWeather=async()=>{
-
-    const epressWeatherUrl=`http://localhost:3030/weather`;
-    const reqExpress=await axios.get(epressWeatherUrl);
-    console.log(reqExpress.data);
+    
+    const expressWeatherUrl=`${process.env.REACT_APP_CLIENT_SERVER}/weather?lat=${this.state.data.lat}&lon=${this.state.data.lon}`;
+    //   console.log(this.state.data);
+    const reqExpress=await axios.get(expressWeatherUrl);
+    console.log(expressWeatherUrl);
     this.setState({
-      weatherData:reqExpress.data,
+      weatherData:reqExpress.data
       // show:true,
     });
+    console.log(this.state.weatherData);
+    //   console.log(this.state.weatherData);
 
+  };
+
+  getMovie=async()=>{
+    const expressMovieURL=`${process.env.REACT_APP_CLIENT_SERVER}/movie?query=${this.state.searchQuery}&limit=8`
+    console.log(expressMovieURL);
+    const reqMovie=await axios.get(expressMovieURL);
+    this.setState({
+      movieData:reqMovie.data
+    });
+    
   }
-
-
-
+  
   render(){
     return (
       <div>
@@ -69,7 +87,11 @@ export class App extends React.Component {
           <Map display_name={this.state.data.display_name}
             lon={this.state.data.lon} lat={this.state.data.lat}
           />
-          <Weather weatherInfo={this.state.weatherData}/>
+          <WeatherData weatherInfo={this.state.weatherData}/>
+          <CardColumns>
+          <Movie movieInfo={this.state.movieData}/>
+
+          </CardColumns>
 
         </>
         }
