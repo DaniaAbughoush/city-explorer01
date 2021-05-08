@@ -3,6 +3,9 @@ import axios from 'axios';
 import Forms from './component/Form';
 import Map from './component/Map';
 import WeatherData from './component/Weather';
+import Movie from './component/Movie';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import CardColumns from 'react-bootstrap/CardColumns'
 
 export class App extends React.Component {
   constructor(props){
@@ -11,7 +14,8 @@ export class App extends React.Component {
       data:'',
       show:false,
       searchQuery:'',
-      weatherData:'',
+      weatherData:[],
+      movieObjext:[],
 
     };
   }
@@ -19,7 +23,7 @@ export class App extends React.Component {
 
   getcity=async(event)=>{
     event.preventDefault();
-    // try{
+    try{
     const url=`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_MAP_KEY}&q=${this.state.searchQuery}&format=json`;
     const req=await axios.get(url);
     // console.log(url);
@@ -28,11 +32,12 @@ export class App extends React.Component {
       show:true
 
     });
-    // }
-    // catch(err){
-    //   this.setState({error: `${err.message}: ${err.response.data.error}`});
-    // }
+    }
+    catch(err){
+      this.setState({error: `${err.message}: ${err.response.data.error}`});
+    }
     this.getWeather();
+ 
   }
   updateSearchQuery=(event)=>{
     event.preventDefault();
@@ -40,10 +45,11 @@ export class App extends React.Component {
       searchQuery:event.target.value
     });
     // this.getWeather();
+    this.getMovie()
   }
 
   getWeather=async()=>{
-
+    
     const expressWeatherUrl=`${process.env.REACT_APP_CLIENT_SERVER}/weather?lat=${this.state.data.lat}&lon=${this.state.data.lon}`;
     //   console.log(this.state.data);
     const reqExpress=await axios.get(expressWeatherUrl);
@@ -57,8 +63,16 @@ export class App extends React.Component {
 
   };
 
-
-
+  getMovie=async()=>{
+    const expressMovieURL=`${process.env.REACT_APP_CLIENT_SERVER}/movie?query=${this.state.searchQuery}&limit=8`
+    console.log(expressMovieURL);
+    const reqMovie=await axios.get(expressMovieURL);
+    this.setState({
+      movieData:reqMovie.data
+    });
+    
+  }
+  
   render(){
     return (
       <div>
@@ -74,6 +88,10 @@ export class App extends React.Component {
             lon={this.state.data.lon} lat={this.state.data.lat}
           />
           <WeatherData weatherInfo={this.state.weatherData}/>
+          <CardColumns>
+          <Movie movieInfo={this.state.movieData}/>
+
+          </CardColumns>
 
         </>
         }
