@@ -1,21 +1,16 @@
-import React from 'react';
+import React, { Component } from 'react'
 
-class Weather extends React.Component {
-  render() {
-    return (
-      this.props.weatherInfo.map(value => {
-        return(
-
-          <div>
-
-            <p>{value.date}</p>
-            <p>{value.description}</p>
-          </div>
-        );
-      }
-      )
-    );
-  }
+export class WeatherData extends Component {
+    render() {
+        return (
+            this.props.weatherInfo.map((data, index) => {
+                return (<div key={index}>
+                    <p>{data.date}</p>
+                    <p>{data.description}</p>
+                </div>)
+            })
+        )
+    }
 }
 
-export default Weather;
+export default WeatherData
