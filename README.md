@@ -180,6 +180,6 @@ axios,bootstrap,react
 ## Change Log
  Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an example:
 
-08/5/202  12:pm 12:30 pm application have moudles
+08/5/202  12:pm 12:30 pm application has moudles
 
 
