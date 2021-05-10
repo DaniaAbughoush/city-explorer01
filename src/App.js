@@ -15,7 +15,7 @@ export class App extends React.Component {
       show:false,
       searchQuery:'',
       weatherData:[],
-      movieObjext:[],
+      movieData:[],
 
     };
   }

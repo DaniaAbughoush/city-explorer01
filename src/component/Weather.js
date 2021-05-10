@@ -1,14 +1,30 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import WeatherDay from '../component/WeatherDay'
+import Table from 'react-bootstrap/Table';
 
 export class WeatherData extends Component {
     render() {
         return (
-            this.props.weatherInfo.map((data, index) => {
-                return (<div key={index}>
-                    <p>{data.date}</p>
-                    <p>{data.description}</p>
-                </div>)
-            })
+            <>
+            <Table style={{borderColor:'blueviolet',borderBlockStyle:'solid'}}>
+            <thead>       
+    <tr>
+        <th>Day</th>
+        <th>descreption</th>
+    </tr>
+    </thead>          
+    {this.props.weatherInfo.map((data, index) => {
+        
+        return (
+            
+            <WeatherDay date={data.date} description={data.description}/> 
+            
+            
+            )
+            
+        })}
+       </Table>
+       </>
         )
     }
 }
