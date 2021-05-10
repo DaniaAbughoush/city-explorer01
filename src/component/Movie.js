@@ -1,7 +1,7 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/Card'
-import CardColumns from 'react-bootstrap/CardColumns';
+// import CardColumns from 'react-bootstrap/CardColumns';
 
 class Movie extends React.Component {
     render() {
