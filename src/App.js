@@ -15,7 +15,7 @@ export class App extends React.Component {
       show:false,
       searchQuery:'',
       weatherData:[],
-      movieObjext:[],
+      movieData:[],
 
     };
   }
@@ -32,11 +32,12 @@ export class App extends React.Component {
       show:true
 
     });
+    this.getWeather();
+    console.log(this.getWeather())
     }
     catch(err){
       this.setState({error: `${err.message}: ${err.response.data.error}`});
     }
-    this.getWeather();
  
   }
   updateSearchQuery=(event)=>{
@@ -46,6 +47,7 @@ export class App extends React.Component {
     });
     // this.getWeather();
     this.getMovie()
+    console.log(this.getMovie())
   }
 
   getWeather=async()=>{
